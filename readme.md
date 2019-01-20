@@ -4,7 +4,7 @@
     </a>
 </p>
 <h1 align="center">modularScroll</h1>
-<p align="center">A dead simple elements in viewport detection.</p>
+<p align="center">Dead simple elements in viewport detection.</p>
 
 ## Installation
 ```sh
@@ -21,7 +21,7 @@ npm install modularscroll -s
 ```js
 import modularScroll from 'modularscroll';
 
-const scroll = new modularScroll();
+const scroll = new modularScroll({});
 ```
 ```html
 <h1 data-scroll>Hello</h1>

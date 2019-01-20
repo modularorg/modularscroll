@@ -1,7 +1,7 @@
 {
   "name": "modularscroll",
   "version": "1.0.0",
-  "description": "A dead simple elements in viewport detection.",
+  "description": "Dead simple elements in viewport detection.",
   "repository": "modularorg/modularscroll",
   "author": "Antoine Boulanger <hello@antoineboulanger.com> (https://antoineboulanger.com)",
   "license": "MIT",
