@@ -54,6 +54,8 @@ export default class {
                 inView: false
             }
         });
+
+        this.checkScroll();
     }
 
     checkScroll() {
