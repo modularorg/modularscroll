@@ -21,7 +21,7 @@ npm install modularscroll -s
 ```js
 import modularScroll from 'modularscroll';
 
-const scroll = new modularScroll({});
+this.scroll = new modularScroll({});
 ```
 ```html
 <h1 data-scroll>Hello</h1>
@@ -32,16 +32,26 @@ const scroll = new modularScroll({});
 ```js
 import modularScroll from 'modularscroll';
 
-const scroll = new modularScroll({
+this.scroll = new modularScroll({
     el: document,
     name: 'scroll',
     class: 'is-inview',
+    offset: 0,
     repeat: false
 });
 ```
 ```html
-<h1 data-scroll>Hello</h1>
-<p data-scroll data-scroll-repeat>Text</p>
+<h1 data-scroll data-scroll-repeat>Hello</h1>
+<p data-scroll data-scroll-offset="60">Text</p>
+```
+
+#### With methods
+```js
+import modularScroll from 'modularscroll';
+
+this.scroll = new modularScroll({});
+
+this.scroll.update();
 ```
 
 ## Options
@@ -50,10 +60,20 @@ const scroll = new modularScroll({
 | `el` | `object` | `document` | Scroll container element |
 | `name` | `string` | `'scroll'` | Data attributes name |
 | `class` | `string` | `'is-inview'` | Elements in-view class |
+| `offset` | `number` | `0` | In-view trigger offset |
 | `repeat` | `boolean` | `false` | Repeat in-view detection |
 
 ## Attributes
 | Attribute | Values | Description |
 | --------- | ------ | ----------- |
 | `data-scroll` |  | Detect if in-view |
-| `data-scroll-repeat` | `true`, `false` | Repeat in-view detection |
+| `data-scroll-class` | `string` | Element in-view class  |
+| `data-scroll-offset` | `number` | Element in-view trigger offset |
+| `data-scroll-repeat` | `true`, `false` | Element in-view detection repeat |
+
+## Methods
+| Attribute | Description |
+| --------- | ----------- |
+| `init()` | Reinit the scroll |
+| `update()` | Update elements position  |
+| `destroy()` | Destroy the scroll events |

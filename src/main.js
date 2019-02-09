@@ -4,6 +4,7 @@ export default class {
             el: document,
             name: 'scroll',
             class: 'is-inview',
+            offset: 0,
             repeat: false
         }
 
@@ -11,32 +12,37 @@ export default class {
         this.name = options.name ? options.name : this.defaults.name;
         this.class = options.class ? options.class : this.defaults.class;
         this.repeat = options.repeat ? options.repeat : this.defaults.repeat;
+        this.offset = options.offset ? options.offset : this.defaults.offset;
 
         this.windowHeight = window.innerHeight;
         this.els = [];
         this.scrollPosition = 0;
         this.frame = false;
 
-        window.addEventListener('scroll', () => {
-            this.checkScroll();
-        }, false);
+        this.checkScroll = this.checkScroll.bind(this);
+        this.checkResize = this.checkResize.bind(this);
 
-        window.addEventListener('resize', () => {
-            this.checkResize();
-        }, false);
+        window.addEventListener('scroll', this.checkScroll, false);
+        window.addEventListener('resize', this.checkResize, false);
 
-        window.onload = () => {
-            this.init();
-        }
+        this.init();
     }
 
     init() {
+        this.scrollPosition = window.scrollY;
+
         const els = this.el.querySelectorAll('[data-'+this.name+']');
 
         els.forEach((el, i) => {
-            const offset = el.getBoundingClientRect().top;
-            const limit = offset + el.offsetHeight;
+            let cl = el.dataset[this.name + '-class'];
+            let top = el.getBoundingClientRect().top + this.scrollPosition;
+            let bottom = top + el.offsetHeight;
             let repeat = el.dataset[this.name + '-repeat'];
+            let offset = el.dataset[this.name + '-offset'];
+
+            if (!cl) {
+                cl = this.class;
+            }
 
             if(repeat == 'false') {
                 repeat = false;
@@ -46,16 +52,28 @@ export default class {
                 repeat = this.repeat;
             }
 
+            if (offset) {
+                offset = parseInt(offset);
+            } else if (this.offset && this.offset != 0) {
+                offset = parseInt(this.offset);
+            }
+
             this.els[i] = {
                 el: el,
+                class: cl,
+                top: top + offset,
+                bottom: bottom,
                 offset: offset,
-                limit: limit,
                 repeat: repeat,
                 inView: false
             }
         });
 
-        this.checkScroll();
+        this.detectElements();
+    }
+
+    update() {
+        this.updateElements();
     }
 
     checkScroll() {
@@ -90,19 +108,12 @@ export default class {
 
         this.els.forEach((el, i) => {
             if (!el.inView) {
-                if ((scrollBottom > el.offset) && (scrollTop < el.limit)) {
-                    if (el.repeat) {
-                        this.els[i].inView = true;
-                    } else {
-                        this.els.splice(i, 1);
-                    }
-
-                    el.el.classList.add(this.class);
+                if ((scrollBottom > el.top) && (scrollTop < el.bottom)) {
+                    this.setInView(el, i);
                 }
             } else {
-                if ((scrollBottom < el.offset) || (scrollTop > el.limit)) {
-                    this.els[i].inView = false;
-                    el.el.classList.remove(this.class);
+                if ((scrollBottom < el.top) || (scrollTop > el.bottom)) {
+                    this.setOutOfView(el, i);
                 }
             }
         });
@@ -110,15 +121,35 @@ export default class {
         this.frame = false;
     }
 
+    setInView(el, i) {
+        if (el.repeat) {
+            this.els[i].inView = true;
+        } else {
+            this.els.splice(i, 1);
+        }
+
+        el.el.classList.add(el.class);
+    }
+
+    setOutOfView(el, i) {
+        this.els[i].inView = false;
+        el.el.classList.remove(el.class);
+    }
+
     updateElements() {
         this.els.forEach((el, i) => {
-            const offset = el.el.getBoundingClientRect().top;
-            const limit = offset + el.el.offsetHeight;
+            const top = el.el.getBoundingClientRect().top + this.scrollPosition;
+            const bottom = top + el.el.offsetHeight;
 
-            this.els[i].offset = offset;
-            this.els[i].limit = offset;
+            this.els[i].top = top + el.offset;
+            this.els[i].bottom = bottom;
         });
 
         this.frame = false;
+    }
+
+    destroy() {
+        window.removeEventListener('scroll', this.checkScroll, false);
+        window.removeEventListener('resize', this.checkResize, false);
     }
 }
