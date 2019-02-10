@@ -1,13 +1,14 @@
 {
   "name": "modularscroll",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Dead simple elements in viewport detection.",
   "repository": "modularorg/modularscroll",
   "author": "Antoine Boulanger <hello@antoineboulanger.com> (https://antoineboulanger.com)",
   "license": "MIT",
-  "main": "lib/main.js",
+  "main": "dist/main.js",
+  "module": "src/main.js",
   "scripts": {
-    "build": "babel src --out-dir lib"
+    "build": "babel src -d dist"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
