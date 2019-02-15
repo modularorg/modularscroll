@@ -1,5 +1,5 @@
 export default class {
-    constructor(options) {
+    constructor(options = {}) {
         this.defaults = {
             el: document,
             name: 'scroll',
@@ -8,11 +8,7 @@ export default class {
             repeat: false
         }
 
-        this.el = options.el ? options.el : this.defaults.el;
-        this.name = options.name ? options.name : this.defaults.name;
-        this.class = options.class ? options.class : this.defaults.class;
-        this.repeat = options.repeat ? options.repeat : this.defaults.repeat;
-        this.offset = options.offset ? options.offset : this.defaults.offset;
+        Object.assign(this, this.defaults, options);
 
         this.windowHeight = window.innerHeight;
         this.els = [];
@@ -34,15 +30,11 @@ export default class {
         const els = this.el.querySelectorAll('[data-'+this.name+']');
 
         els.forEach((el, i) => {
-            let cl = el.dataset[this.name + '-class'];
+            let cl = el.dataset[this.name + '-class'] || this.class;
             let top = el.getBoundingClientRect().top + this.scrollPosition;
             let bottom = top + el.offsetHeight;
+            let offset = parseInt(el.dataset[this.name + '-offset']) || parseInt(this.offset);
             let repeat = el.dataset[this.name + '-repeat'];
-            let offset = el.dataset[this.name + '-offset'];
-
-            if (!cl) {
-                cl = this.class;
-            }
 
             if(repeat == 'false') {
                 repeat = false;
@@ -50,12 +42,6 @@ export default class {
                 repeat = true;
             } else {
                 repeat = this.repeat;
-            }
-
-            if (offset) {
-                offset = parseInt(offset);
-            } else if (this.offset && this.offset != 0) {
-                offset = parseInt(this.offset);
             }
 
             this.els[i] = {

@@ -21,7 +21,7 @@ npm install modularscroll -s
 ```js
 import modularScroll from 'modularscroll';
 
-this.scroll = new modularScroll({});
+this.scroll = new modularScroll();
 ```
 ```html
 <h1 data-scroll>Hello</h1>
