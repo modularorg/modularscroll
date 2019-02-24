@@ -8,7 +8,7 @@
 
 ## Installation
 ```sh
-npm install modularscroll -s
+npm install modularscroll
 ```
 
 ## Why
@@ -72,7 +72,7 @@ this.scroll.update();
 | `data-scroll-repeat` | `true`, `false` | Element in-view detection repeat |
 
 ## Methods
-| Attribute | Description |
+| Method | Description |
 | --------- | ----------- |
 | `init()` | Reinit the scroll |
 | `update()` | Update elements position  |
