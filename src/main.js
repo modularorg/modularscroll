@@ -10,6 +10,7 @@ export default class {
 
         Object.assign(this, this.defaults, options);
 
+        this.namespace = 'modular';
         this.windowHeight = window.innerHeight;
         this.els = [];
         this.scrollPosition = 0;
@@ -35,6 +36,7 @@ export default class {
             let bottom = top + el.offsetHeight;
             let offset = parseInt(el.dataset[this.name + '-offset']) || parseInt(this.offset);
             let repeat = el.dataset[this.name + '-repeat'];
+            let call = el.dataset[this.name + '-call'];
 
             if(repeat == 'false') {
                 repeat = false;
@@ -51,7 +53,8 @@ export default class {
                 bottom: bottom,
                 offset: offset,
                 repeat: repeat,
-                inView: false
+                inView: false,
+                call: call
             }
         });
 
@@ -115,6 +118,14 @@ export default class {
         }
 
         el.el.classList.add(el.class);
+
+        if (el.call) {
+            this.callValue = el.call.split(',').map(item => item.trim());
+            if (this.callValue.length == 1) this.callValue = this.callValue[0];
+
+            const callEvent = new Event(this.namespace + 'call');
+            window.dispatchEvent(callEvent);
+        }
     }
 
     setOutOfView(el, i) {
@@ -132,6 +143,17 @@ export default class {
         });
 
         this.frame = false;
+    }
+
+    on(event, func) {
+        window.addEventListener(this.namespace + event, () => {
+            switch (event) {
+                case 'call':
+                    return func(this.callValue);
+                default:
+                    return func();
+            }
+        }, false);
     }
 
     destroy() {

@@ -49,31 +49,51 @@ this.scroll = new modularScroll({
 ```js
 import modularScroll from 'modularscroll';
 
-this.scroll = new modularScroll({});
+this.scroll = new modularScroll();
 
 this.scroll.update();
+```
+
+#### With events
+```js
+import modularScroll from 'modularscroll';
+
+this.scroll = new modularScroll();
+
+this.scroll.on('call', (func) => {
+    this.call(...func); // Using modularJS
+});
+```
+```html
+<div data-scroll data-scroll-call="function, module">Trigger</div>
 ```
 
 ## Options
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
-| `el` | `object` | `document` | Scroll container element |
-| `name` | `string` | `'scroll'` | Data attributes name |
-| `class` | `string` | `'is-inview'` | Elements in-view class |
-| `offset` | `number` | `0` | In-view trigger offset |
-| `repeat` | `boolean` | `false` | Repeat in-view detection |
+| `el` | `object` | `document` | Scroll container element. |
+| `name` | `string` | `'scroll'` | Data attributes name. |
+| `class` | `string` | `'is-inview'` | Elements in-view class. |
+| `offset` | `number` | `0` | In-view trigger offset. |
+| `repeat` | `boolean` | `false` | Repeat in-view detection. |
 
 ## Attributes
 | Attribute | Values | Description |
 | --------- | ------ | ----------- |
-| `data-scroll` |  | Detect if in-view |
-| `data-scroll-class` | `string` | Element in-view class  |
-| `data-scroll-offset` | `number` | Element in-view trigger offset |
-| `data-scroll-repeat` | `true`, `false` | Element in-view detection repeat |
+| `data-scroll` |  | Detect if in-view. |
+| `data-scroll-class` | `string` | Element in-view class.  |
+| `data-scroll-offset` | `number` | Element in-view trigger offset. |
+| `data-scroll-repeat` | `true`, `false` | Element in-view detection repeat. |
+| `data-scroll-call` | `string` | Element in-view trigger call event. |
 
 ## Methods
 | Method | Description |
 | --------- | ----------- |
-| `init()` | Reinit the scroll |
-| `update()` | Update elements position  |
-| `destroy()` | Destroy the scroll events |
+| `init()` | Reinit the scroll. |
+| `update()` | Update elements position.  |
+| `destroy()` | Destroy the scroll events. |
+
+## Events
+| Event | Arguments | Description |
+| ----- | --------- | ----------- |
+| `call` | `func` | Trigger if in-view. Returns your `string` or `array` if contains `,`. |
